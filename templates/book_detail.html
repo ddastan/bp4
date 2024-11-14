@@ -1,5 +1,5 @@
-
-<!DOCTYPE html>
+<!--Подключение к header.html-->
+{% include 'header.html' %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -121,6 +121,28 @@
     </div>
 </div>
 
+<h2>{{ book.title }}</h2>
+<p>Автор: {{ book.author }}</p>
+<!-- Здесь отображение деталей книги -->
+
+<h3>Комментарии</h3>
+{% for comment in comments %}
+    <div class="comment">
+        <p><strong>{{ comment.username }}</strong> написал:</p>
+        <p>{{ comment.text }}</p>
+        <small>{{ comment.created_at }}</small>
+    </div>
+{% empty %}
+    <p>Комментариев пока нет.</p>
+{% endfor %}
+
+<h3>Добавить комментарий</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Отправить</button>
+</form>
+
 <!-- Футер -->
 <footer>
     © 2024 Ваш Сайт:
@@ -132,3 +154,5 @@
         crossorigin="anonymous"></script>
 </body>
 </html>
+
+{% include 'footer.html' %}
