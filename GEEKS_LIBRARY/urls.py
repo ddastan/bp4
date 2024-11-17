@@ -21,4 +21,5 @@ from main_page import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('library/', include('main_page.urls')),
+    path('basket/', include('basket.urls')),
 ]
