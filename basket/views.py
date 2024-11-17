@@ -4,7 +4,7 @@ from .models import Order
 from .forms import OrderForm
 
 def order_list(request):
-    query = request.GET.get('q')  # Получаем значение из строки поиска
+    query = request.GET.get('q')
     if query:
         orders = Order.objects.filter(
             Q(name__icontains=query) |
@@ -15,6 +15,10 @@ def order_list(request):
     else:
         orders = Order.objects.all()
     return render(request, 'order_list.html', {'orders': orders, 'query': query})
+
+def order_detail(request, order_id):
+    order = get_object_or_404(Order, pk=order_id)
+    return render(request, 'order_detail.html', {'order': order})
 
 def order_create(request):
     if request.method == 'POST':
