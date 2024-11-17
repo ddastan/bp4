@@ -1,5 +1,12 @@
 <h1>Список заказов</h1>
+
+<form method="get" action="">
+    <input type="text" name="q" value="{{ query }}" placeholder="Введите данные для поиска">
+    <button type="submit">Найти</button>
+</form>
+
 <a href="{% url 'order_create' %}">Создать новый заказ</a>
+
 <table>
     <tr>
         <th>Имя</th>
@@ -18,6 +25,10 @@
             <a href="{% url 'order_update' order.pk %}">Редактировать</a>
             <a href="{% url 'order_delete' order.pk %}">Удалить</a>
         </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5">Нет заказов, соответствующих поиску.</td>
     </tr>
     {% endfor %}
 </table>
