@@ -2,48 +2,45 @@ from django.db.models import Q
 from django.shortcuts import render, redirect, get_object_or_404
 from .models import Order
 from .forms import OrderForm
+from django.views import generic
 
-def order_list(request):
-    query = request.GET.get('q')
-    if query:
-        orders = Order.objects.filter(
-            Q(name__icontains=query) |
-            Q(phone_number__icontains=query) |
-            Q(email__icontains=query) |
-            Q(book__title__icontains=query)
-        )
-    else:
-        orders = Order.objects.all()
-    return render(request, 'order_list.html', {'orders': orders, 'query': query})
+class OrderListView(generic.ListView):
+    template_name = 'order_list.html'
+    context_object_name = 'order_list'
+    model = Order
 
-def order_detail(request, order_id):
-    order = get_object_or_404(Order, pk=order_id)
-    return render(request, 'order_detail.html', {'order': order})
+    def get_queryset(self):
+        return self.model.objects.filter().order_by('-id')
 
-def order_create(request):
-    if request.method == 'POST':
-        form = OrderForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('order_list')
-    else:
-        form = OrderForm()
-    return render(request, 'order_form.html', {'form': form})
 
-def order_update(request, pk):
-    order = get_object_or_404(Order, pk=pk)
-    if request.method == 'POST':
-        form = OrderForm(request.POST, instance=order)
-        if form.is_valid():
-            form.save()
-            return redirect('order_list')
-    else:
-        form = OrderForm(instance=order)
-    return render(request, 'order_form.html', {'form': form})
+class CreateOrderView(generic.CreateView):
+    template_name = 'create_order.html'
+    form_class = OrderForm
+    success_url = '/order_class/'
 
-def order_delete(request, pk):
-    order = get_object_or_404(Order, pk=pk)
-    if request.method == 'POST':
-        order.delete()
-        return redirect('order_list')
-    return render(request, 'order_confirm_delete.html', {'basket': order})
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super(CreateOrderView, self).form_valid(form=form)
+
+
+class UpdateOrderView(generic.UpdateView):
+    template_name = 'update_order.html'
+    form_class = OrderForm
+    success_url = 'order_class/'
+
+
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        return super(UpdateOrderView, self).form_valid(form=form)
+
+    def get_object(self, **kwargs):
+        order_id = self.kwargs.get('id')
+        return get_object_or_404(Order, id=order_id)
+
+class DeleteOrderView(generic.DeleteView):
+    template_name = 'confirm_delete.html'
+    success_url = 'order_class/'
+
+    def get_object(self, **kwargs):
+        todo_id = self.kwargs.get('id')
+        return get_object_or_404(Order, id=todo_id)
