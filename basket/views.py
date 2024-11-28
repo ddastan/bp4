@@ -3,14 +3,17 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Order
 from .forms import OrderForm
 from django.views import generic
+from django.views.decorators.cache import cache_page
+from django.utils.decorators import method_decorator
 
+@method_decorator(cache_page(60 * 15), name='dispatch')
 class OrderListView(generic.ListView):
     template_name = 'order_list.html'
     context_object_name = 'order_list'
     model = Order
 
     def get_queryset(self):
-        return self.model.objects.filter().order_by('-id')
+        return self.model.objects.select_related().order_by('-id')
 
 
 class CreateOrderView(generic.CreateView):

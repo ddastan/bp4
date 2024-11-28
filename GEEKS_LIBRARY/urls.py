@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+import debug_toolbar
+from GEEKS_LIBRARY import settings
 from main_page import views
 
 urlpatterns = [
@@ -24,3 +26,9 @@ urlpatterns = [
     path('basket/', include('basket.urls')),
     path('parsing_manas/', include('parsing_manas.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns = [
+        path('__debug__/', include(debug_toolbar.urls)),
+    ]+urlpatterns
+
