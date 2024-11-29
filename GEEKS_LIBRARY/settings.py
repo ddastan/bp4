@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'parsing_manas',
     'debug_toolbar',
     'django_extensions',
+    'MobileDevices',
 ]
 
 MIDDLEWARE = [
