@@ -25,6 +25,7 @@ urlpatterns = [
     path('library/', include('main_page.urls')),
     path('basket/', include('basket.urls')),
     path('parsing_manas/', include('parsing_manas.urls')),
+    path('devices/', include('devices.urls')),
 ]
 
 if settings.DEBUG:
