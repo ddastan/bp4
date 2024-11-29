@@ -1,7 +1,7 @@
 from django import forms
 from . import models, parser_manas
 
-class ParserForm(forms.Form):
+class ManasForm(forms.Form):
     MEDIA_CHOICES = (
         ('manas', 'manas'),
     )
